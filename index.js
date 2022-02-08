@@ -5,7 +5,7 @@ import data from './json/data';
 // Write Javascript code!
 const appDiv = document.getElementById('title');
 console.log(data);
-appDiv.innerHTML = `<h1>JS Starter</h1>`;
+appDiv.innerHTML = `<h1>Comments Starter</h1>`;
 
 generatePostCommentSection();
 attachListener();
@@ -18,7 +18,6 @@ function attachListener() {
       event.target.tagName === 'BUTTON' &&
       document.querySelector('#commentValue').value
     ) {
-      console.log(document.querySelector('#commentValue').value);
 
       generateListOfComment(document.querySelector('#commentValue').value);
       document.querySelector('#commentValue').value = '';
@@ -26,8 +25,7 @@ function attachListener() {
   });
 
   document.querySelector('.commentsList').addEventListener('click', (event) => {
-    console.log(event.target.parentNode);
-    if (event.target.tagName === 'A') {
+    if (event.target.tagName === 'A' && event.target.innerHTML === 'Delete') {
       removeComment(event.target.parentNode);
     }
   });
@@ -47,10 +45,19 @@ function generateListOfComment(comment) {
   //////
 
   var deleteLink = document.createElement('a');
-  deleteLink.className = 'delete-link';
+  deleteLink.className = 'delete-link p-icon--delete';
   deleteLink.innerHTML = 'Delete';
   deleteLink.href = '#';
   commentDiv.appendChild(deleteLink);
+  /////////
+  //////. Reply link
+
+  var replyLink = document.createElement('a');
+  replyLink.className = 'reply-link p-icon--external-link';
+  replyLink.innerHTML = 'reply';
+  replyLink.href = '#';
+  commentDiv.appendChild(replyLink);
+  ///////
 
   //////
   commentDiv.appendChild(document.createElement('hr'));
