@@ -12,8 +12,9 @@ attachListener();
 
 //generateListOfComment();
 function attachListener() {
+
+  // Post Comment Litener
   document.querySelector('#postComment').addEventListener('click', (event) => {
-    console.log(event.target.tagName);
     if (
       event.target.tagName === 'BUTTON' &&
       document.querySelector('#commentValue').value
@@ -24,6 +25,7 @@ function attachListener() {
     }
   });
 
+  // Comments Delete Listener
   document.querySelector('.commentsList').addEventListener('click', (event) => {
     if (event.target.tagName === 'A' && event.target.innerHTML === 'Delete') {
       removeComment(event.target.parentNode);
@@ -32,7 +34,31 @@ function attachListener() {
     if (event.target.tagName === 'A' && event.target.innerHTML === 'reply') {
       replyComment(event.target.parentNode);
     }
+
+    if (event.target.tagName === 'BUTTON' && event.target.innerHTML === 'Reply') {
+      const replyValue = event.target.parentNode.firstChild.value
+      console.log(event.target.tagName, event)
+      createReplyList(replyValue);
+
+    }
+
+
   });
+
+//. POst Reply Listener
+
+// document.querySelector('#postComment').addEventListener('click', (event) => {
+//   if (
+//     event.target.tagName === 'BUTTON' &&
+//     document.querySelector('#commentValue').value
+//   ) {
+
+//     generateListOfComment(document.querySelector('#commentValue').value);
+//     document.querySelector('#commentValue').value = '';
+//   }
+// });
+
+
 }
 
 function removeComment(node) {
@@ -42,9 +68,21 @@ function removeComment(node) {
 function replyComment(node){
   console.log('Here')
   const replyNode = document.createElement('div');
+  replyNode.className = 'reply-section';
   const textareaNode = document.createElement('textarea');
+  textareaNode.placeholder = 'Reply';
   replyNode.appendChild(textareaNode);
+
+  const replyButton = document.createElement('button');
+  replyButton.innerHTML = 'Reply';
+  replyButton.className = 'reply-button';
+  replyNode.appendChild(replyButton);
+
   node.appendChild(replyNode);
+
+}
+
+function createReplyList(value){
 
 }
 
@@ -63,7 +101,8 @@ function generateListOfComment(comment) {
   deleteLink.href = '#';
   commentDiv.appendChild(deleteLink);
   /////////
-  //////. Reply link
+
+  //////. Reply link. ///////////
 
   var replyLink = document.createElement('a');
   replyLink.className = 'reply-link p-icon--external-link';
