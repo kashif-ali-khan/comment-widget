@@ -28,11 +28,24 @@ function attachListener() {
     if (event.target.tagName === 'A' && event.target.innerHTML === 'Delete') {
       removeComment(event.target.parentNode);
     }
+
+    if (event.target.tagName === 'A' && event.target.innerHTML === 'reply') {
+      replyComment(event.target.parentNode);
+    }
   });
 }
 
 function removeComment(node) {
   document.querySelector('.commentsList').removeChild(node);
+}
+
+function replyComment(node){
+  console.log('Here')
+  const replyNode = document.createElement('div');
+  const textareaNode = document.createElement('textarea');
+  replyNode.appendChild(textareaNode);
+  node.appendChild(replyNode);
+
 }
 
 function generateListOfComment(comment) {
