@@ -3,130 +3,91 @@ import './style.css';
 import data from './json/data';
 
 // Write Javascript code!
-const appDiv = document.getElementById('title');
-console.log(data);
-appDiv.innerHTML = `<h1>Comments Starter</h1>`;
+const commentContainer = document.getElementById('commentsList');
+document.querySelector('#addComment').addEventListener('click', (event) => {
+  addComment(event);
+});
 
-generatePostCommentSection();
-attachListener();
+function addComment(event) {
+  let wrapDiv;
 
-//generateListOfComment();
-function attachListener() {
+  let textDiv = document.createElement('div');
 
-  // Post Comment Litener
-  document.querySelector('#postComment').addEventListener('click', (event) => {
-    if (
-      event.target.tagName === 'BUTTON' &&
-      document.querySelector('#commentValue').value
-    ) {
-
-      generateListOfComment(document.querySelector('#commentValue').value);
-      document.querySelector('#commentValue').value = '';
-    }
-  });
-
-  // Comments Delete Listener
-  document.querySelector('.commentsList').addEventListener('click', (event) => {
-    if (event.target.tagName === 'A' && event.target.innerHTML === 'Delete') {
-      removeComment(event.target.parentNode);
-    }
-
-    if (event.target.tagName === 'A' && event.target.innerHTML === 'reply') {
-      replyComment(event.target.parentNode);
-    }
-
-    if (event.target.tagName === 'BUTTON' && event.target.innerHTML === 'Reply') {
-      const replyValue = event.target.parentNode.firstChild.value
-      console.log(event.target.tagName, event)
-      createReplyList(replyValue);
-
-    }
-
-
-  });
-
-//. POst Reply Listener
-
-// document.querySelector('#postComment').addEventListener('click', (event) => {
-//   if (
-//     event.target.tagName === 'BUTTON' &&
-//     document.querySelector('#commentValue').value
-//   ) {
-
-//     generateListOfComment(document.querySelector('#commentValue').value);
-//     document.querySelector('#commentValue').value = '';
-//   }
-// });
-
-
-}
-
-function removeComment(node) {
-  document.querySelector('.commentsList').removeChild(node);
-}
-
-function replyComment(node){
-  console.log('Here')
-  const replyNode = document.createElement('div');
-  replyNode.className = 'reply-section';
-  const textareaNode = document.createElement('textarea');
-  textareaNode.placeholder = 'Reply';
-  replyNode.appendChild(textareaNode);
-
-  const replyButton = document.createElement('button');
+  //. Reply
+  let replyButton = document.createElement('button');
   replyButton.innerHTML = 'Reply';
-  replyButton.className = 'reply-button';
-  replyNode.appendChild(replyButton);
+  replyButton.className = 'reply';
 
-  node.appendChild(replyNode);
+  //Delete
+  let deleteButton = document.createElement('button');
+  deleteButton.innerHTML = 'Delete';
+  deleteButton.className = 'deleteComment';
 
+  //Like
+  let likeButton = document.createElement('button');
+  likeButton.innerHTML = 'Like';
+  likeButton.className = 'likeComment';
+
+  if (hasClass(event.target.parentElement, 'container')) {
+    let commentValue = document.querySelector('#comment').value;
+    wrapDiv = document.createElement('div');
+    wrapDiv.style.marginLeft = 0;
+    wrapDiv.className = 'wrapper';
+    textDiv.innerHTML = commentValue;
+    wrapDiv.append(textDiv, replyButton, likeButton, deleteButton);
+    commentContainer.appendChild(wrapDiv);
+    document.querySelector('#comment').value = '';
+  } else {
+    wrapDiv = event.target.parentElement;
+
+  }
 }
 
-function createReplyList(value){
-
+function hasClass(elem, className) {
+  return elem.className.split(' ').indexOf(className) > -1;
 }
 
-function generateListOfComment(comment) {
-  var commentDiv = document.createElement('div');
+document
+  .getElementById('commentsList').addEventListener('click', (event) => {
+    console.log(event.target.className)
 
-  /////
-  var commentSpan = document.createElement('span');
-  commentSpan.innerHTML = comment;
-  commentDiv.appendChild(commentSpan);
-  //////
+    if (hasClass(event.target, 'likeComment')) {
+      const likeValue = event.target.innerHTML;
+      event.target.innerHTML = event.target.innerHTML !== 'Like' ? Number(likeValue) + 1 : 1;
+    } else if (hasClass(event.target, 'deleteComment')) {
+      event.target.parentElement.remove();
+    }else if (hasClass(event.target, 'cancelReply')) {
+     event.target.parentElement.innerHTML = '';
+    }
 
-  var deleteLink = document.createElement('a');
-  deleteLink.className = 'delete-link p-icon--delete';
-  deleteLink.innerHTML = 'Delete';
-  deleteLink.href = '#';
-  commentDiv.appendChild(deleteLink);
-  /////////
+    
 
-  //////. Reply link. ///////////
+    else if (hasClass(event.target, 'reply')) {
+      console.log(event.target.parentElement);
+      const parentDiv = event.target.parentElement;
 
-  var replyLink = document.createElement('a');
-  replyLink.className = 'reply-link p-icon--external-link';
-  replyLink.innerHTML = 'reply';
-  replyLink.href = '#';
-  commentDiv.appendChild(replyLink);
-  ///////
+      const wrapDiv = document.createElement('div');
+      wrapDiv.className = 'wrapper';
+      wrapDiv.style.marginLeft = (parseInt(parentDiv.style.marginLeft)+15).toString()+'px';
+      console.log( wrapDiv.style.marginLeft);
+      const textarea = document.createElement('textarea');
+      textarea.style.marginRight = '20px';
 
-  //////
-  commentDiv.appendChild(document.createElement('hr'));
+      const addReply = document.createElement('button');
+      addReply.className = 'addReply';
+      addReply.innerHTML = 'Add'
 
-  ////
+      const cancelReply = document.createElement('button');
+      cancelReply.className = 'cancelReply';
+      cancelReply.innerHTML = 'Cancel'
 
-  commentDiv.className = 'comment';
-  document.querySelector('.commentsList').appendChild(commentDiv);
- 
-}
-function generatePostCommentSection() {
-  var comment = `
-  <div>
-    <div><textarea placeholder="Enter Comment" name="commentValue" id="commentValue"></textarea></div>
-    <div><button>Post Comment</button></div>
-  </div>
-  `;
 
-  document.querySelector('#postComment').innerHTML = comment;
-}
+      wrapDiv.append(textarea,addReply,cancelReply);
+      parentDiv.appendChild(wrapDiv);
+
+    }
+
+
+
+  })
+
