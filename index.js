@@ -89,10 +89,13 @@ document
       const addReply = document.createElement('button');
       addReply.className = 'addReply';
       addReply.innerHTML = 'Add'
+      addReply.classList.add('is-small');
+
 
       const cancelReply = document.createElement('button');
       cancelReply.className = 'cancelReply';
       cancelReply.innerHTML = 'Cancel';
+      cancelReply.classList.add('is-small');
 
       wrapDiv.append(textarea, addReply, cancelReply);
       parentDiv.appendChild(wrapDiv);
