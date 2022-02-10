@@ -10,35 +10,48 @@ document.querySelector('#addComment').addEventListener('click', (event) => {
 
 function addComment(event) {
   let wrapDiv;
-
   let textDiv = document.createElement('div');
 
   //. Reply
   let replyButton = document.createElement('button');
   replyButton.innerHTML = 'Reply';
   replyButton.className = 'reply';
+  replyButton.classList.add('p-button--positive');
+  replyButton.classList.add('is-small');
 
   //Delete
   let deleteButton = document.createElement('button');
   deleteButton.innerHTML = 'Delete';
   deleteButton.className = 'deleteComment';
+  deleteButton.classList.add('p-button--negative');
+  deleteButton.classList.add('is-small');
+
 
   //Like
   let likeButton = document.createElement('button');
   likeButton.innerHTML = 'Like';
   likeButton.className = 'likeComment';
+  likeButton.classList.add('p-button');
+  likeButton.classList.add('is-small');
 
   if (hasClass(event.target.parentElement, 'container')) {
     let commentValue = document.querySelector('#comment').value;
     wrapDiv = document.createElement('div');
     wrapDiv.style.marginLeft = 0;
     wrapDiv.className = 'wrapper';
+    wrapDiv.classList.add('p-strip--light');
+
     textDiv.innerHTML = commentValue;
     wrapDiv.append(textDiv, replyButton, likeButton, deleteButton);
+
     commentContainer.appendChild(wrapDiv);
     document.querySelector('#comment').value = '';
+
   } else {
     wrapDiv = event.target.parentElement;
+    textDiv.innerHTML = wrapDiv.firstChild.value;
+    wrapDiv.innerHTML = '';
+    wrapDiv.append(textDiv, replyButton, likeButton, deleteButton);
 
   }
 }
@@ -49,27 +62,20 @@ function hasClass(elem, className) {
 
 document
   .getElementById('commentsList').addEventListener('click', (event) => {
-    console.log(event.target.className)
 
     if (hasClass(event.target, 'likeComment')) {
       const likeValue = event.target.innerHTML;
       event.target.innerHTML = event.target.innerHTML !== 'Like' ? Number(likeValue) + 1 : 1;
     } else if (hasClass(event.target, 'deleteComment')) {
       event.target.parentElement.remove();
-    }else if (hasClass(event.target, 'cancelReply')) {
-     event.target.parentElement.innerHTML = '';
-    }
-
-    
-
-    else if (hasClass(event.target, 'reply')) {
-      console.log(event.target.parentElement);
+    } else if (hasClass(event.target, 'cancelReply')) {
+      event.target.parentElement.innerHTML = '';
+    } else if (hasClass(event.target, 'reply')) {
       const parentDiv = event.target.parentElement;
 
       const wrapDiv = document.createElement('div');
       wrapDiv.className = 'wrapper';
-      wrapDiv.style.marginLeft = (parseInt(parentDiv.style.marginLeft)+15).toString()+'px';
-      console.log( wrapDiv.style.marginLeft);
+      wrapDiv.style.marginLeft = (parseInt(parentDiv.style.marginLeft) + 15).toString() + 'px';
       const textarea = document.createElement('textarea');
       textarea.style.marginRight = '20px';
 
@@ -79,15 +85,14 @@ document
 
       const cancelReply = document.createElement('button');
       cancelReply.className = 'cancelReply';
-      cancelReply.innerHTML = 'Cancel'
+      cancelReply.innerHTML = 'Cancel';
 
-
-      wrapDiv.append(textarea,addReply,cancelReply);
+      wrapDiv.append(textarea, addReply, cancelReply);
       parentDiv.appendChild(wrapDiv);
 
+    } else if (hasClass(event.target, 'addReply')) {
+      addComment(event);
     }
-
-
 
   })
 
