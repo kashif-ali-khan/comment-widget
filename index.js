@@ -36,6 +36,9 @@ function addComment(event) {
 
   if (hasClass(event.target.parentElement, 'container')) {
     let commentValue = document.querySelector('#comment').value;
+    if(!commentValue){
+      return;
+    }
     wrapDiv = document.createElement('div');
     wrapDiv.style.marginLeft = 0;
     wrapDiv.className = 'wrapper';
@@ -49,7 +52,11 @@ function addComment(event) {
 
   } else {
     wrapDiv = event.target.parentElement;
+    if(!wrapDiv.firstChild.value){
+      return;
+    }
     textDiv.innerHTML = wrapDiv.firstChild.value;
+
     wrapDiv.innerHTML = '';
     wrapDiv.append(textDiv, replyButton, likeButton, deleteButton);
 
